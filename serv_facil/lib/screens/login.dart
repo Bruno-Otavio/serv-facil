@@ -41,6 +41,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _matriculaController.text = '200';
+    _pinController.text = '1234';
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _matriculaController.dispose();
