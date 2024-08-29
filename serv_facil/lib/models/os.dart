@@ -1,5 +1,7 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'user.dart';
+
 class Os {
   const Os({
     required this.id,
@@ -14,8 +16,8 @@ class Os {
 
   final int id;
   final String descricao;
-  final String colaborador;
-  final String? executor;
+  final User colaborador;
+  final User? executor;
   final DateTime abertura;
   final DateTime? encerramento;
   final LatLng local;
@@ -26,8 +28,8 @@ class Os {
       {
         'id': int id,
         'descricao': String descricao,
-        'colaborador': String colaborador,
-        'executor': String? executor,
+        'colaborador': User colaborador,
+        'executor': User? executor,
         'abertura': String abertura,
         'encerramento': String? encerramento,
         'latitude': double lat,

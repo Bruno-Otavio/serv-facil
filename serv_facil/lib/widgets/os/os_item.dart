@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:serv_facil/models/os.dart';
-import 'package:serv_facil/widgets/button.dart';
 import 'package:serv_facil/widgets/os/os_item_info.dart';
+import 'package:serv_facil/widgets/small_button.dart';
 
 class OsItem extends StatelessWidget {
   const OsItem({
@@ -31,26 +31,40 @@ class OsItem extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onTertiary,
+                    color: !os.finished
+                        ? Theme.of(context).colorScheme.onTertiary
+                        : Theme.of(context).colorScheme.primary,
                   ),
                 ),
               ),
-              OsItemInfo(title: 'Colaborador', content: os.colaborador),
               OsItemInfo(
-                title: 'Data',
+                title: 'Colaborador:',
+                content: os.colaborador.nome,
+                os: os,
+              ),
+              os.executor != null
+                  ? OsItemInfo(title: 'Executor', content: os.executor!.nome, os: os)
+                  : const SizedBox(),
+              OsItemInfo(
+                title: 'Aberto em:',
                 content:
                     '${os.abertura.day}/${os.abertura.month}/${os.abertura.year}, ${os.abertura.hour}:${os.abertura.minute}',
+                os: os,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Button(
-                      onTap: () {},
-                      text: 'Detalhes',
-                      margin: const EdgeInsets.only(left: 150, top: 5, bottom: 5),
-                    ),
-                  ),
-                ],
+              os.encerramento != null
+                  ? OsItemInfo(
+                      title: 'Encerrado em:',
+                      content:
+                          '${os.encerramento!.day}/${os.encerramento!.month}/${os.encerramento!.year}, ${os.encerramento!.hour}/${os.encerramento!.minute}',
+                      os: os,
+                    )
+                  : const SizedBox(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: SmallButton(
+                  onTap: () {},
+                  text: 'Detalhes',
+                ),
               )
             ],
           ),

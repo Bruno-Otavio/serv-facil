@@ -12,7 +12,7 @@ class User {
   final String nome;
   final String cargo;
   final String setor;
-  final String token;
+  final String? token;
   final List oss;
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -22,7 +22,6 @@ class User {
         'nome': String nome,
         'cargo': String cargo,
         'setor': String setor,
-        'token': String token,
         'oss': List oss,
       } =>
         User(
@@ -30,7 +29,7 @@ class User {
           nome: nome,
           cargo: cargo,
           setor: setor,
-          token: token,
+          token: json['token']?? json['token'],
           oss: oss,
         ),
       _ => throw const FormatException('Could not get User.'),
