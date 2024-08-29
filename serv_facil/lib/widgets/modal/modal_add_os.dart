@@ -20,7 +20,7 @@ class _ModalAddOsState extends State<ModalAddOs> {
 
   void _addOs() async {
     User user = Provider.of<UserProvider>(context, listen: false).user;
-    OsService.addOs(colaborador: user, descricao: _descriptionController.text);
+    await OsService.addOs(colaborador: user, descricao: _descriptionController.text);
   }
 
   @override
@@ -41,18 +41,19 @@ class _ModalAddOsState extends State<ModalAddOs> {
             child: Column(
               children: [
                 const SizedBox(height: 25),
-                const Text(
+                Text(
                   'Nova ordem de serviço',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 TextInput(
                   controller: _descriptionController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Insira um comentário para cirar uma OS.';
+                      return 'Insira uma descrição para cirar uma OS.';
                     }
                     return null;
                   },
@@ -60,7 +61,11 @@ class _ModalAddOsState extends State<ModalAddOs> {
                   margin: const EdgeInsets.symmetric(vertical: 25),
                 ),
                 Button(
-                  onTap: _addOs,
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      _addOs();
+                    }
+                  },
                   text: 'Criar',
                   margin: EdgeInsets.zero,
                 ),

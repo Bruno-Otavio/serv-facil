@@ -4,7 +4,7 @@ import 'package:serv_facil/models/os.dart';
 import 'package:serv_facil/models/user.dart';
 import 'package:serv_facil/provider/user_provider.dart';
 import 'package:serv_facil/services/os_service.dart';
-import 'package:serv_facil/widgets/modal_add_os.dart';
+import 'package:serv_facil/widgets/modal/modal_add_os.dart';
 import 'package:serv_facil/widgets/os/os_item.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -44,11 +44,12 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.hasData) {
             final data = snapshot.data!;
             return ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  final Os os = data[index];
-                  return OsItem(os: os);
-                });
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                final Os os = data[index];
+                return OsItem(os: os);
+              },
+            );
           } else if (snapshot.hasError) {
             return Text('${snapshot.error}');
           }
@@ -59,12 +60,16 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(context: context, builder: (context) {
-            return const ModalAddOs();
-          });
+          showModalBottomSheet(
+            context: context,
+            builder: (context) => const ModalAddOs(),
+          );
         },
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        child: Icon(Icons.add, color: Theme.of(context).colorScheme.onTertiary,),
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.onTertiary,
+        ),
       ),
       drawer: Drawer(),
     );

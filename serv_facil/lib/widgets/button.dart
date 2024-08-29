@@ -35,16 +35,15 @@ class Button extends StatelessWidget {
                   )
                 : Border.all(style: BorderStyle.none),
           ),
-          child: Center(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 24,
-                color: filled
-                    ? Theme.of(context).colorScheme.onTertiary
-                    : Theme.of(context).colorScheme.onPrimary.withOpacity(0.75),
-                fontWeight: FontWeight.bold,
-              ),
+          child: Text(
+            text,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24,
+              color: filled
+                  ? Theme.of(context).colorScheme.onTertiary
+                  : Theme.of(context).colorScheme.onPrimary.withOpacity(0.75),
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),

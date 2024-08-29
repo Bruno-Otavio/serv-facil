@@ -60,10 +60,41 @@ class OsService {
       'authorization': colaborador.token!,
     };
 
-    final response = await http.post(Uri.parse('$apiUrl/os'), body: jsonEncode(data), headers: headers);
+    final response = await http.post(
+      Uri.parse('$apiUrl/os'),
+      body: jsonEncode(data),
+      headers: headers,
+    );
 
     if (response.statusCode != 201) {
-      throw Exception('Could not create new OS.');
+      final body = jsonDecode(response.body);
+      throw Exception('Could not create new OS: ${body['message']}');
+    }
+  }
+
+  static Future<void> updateOsDescription({
+    required int id,
+    required String descricao,
+    required String token,
+  }) async {
+    final data = <String, dynamic>{
+      'id': id,
+      'descricao': descricao,
+    };
+
+    final headers = <String, String>{
+      'authorization': token,
+    };
+
+    final response = await http.patch(
+      Uri.parse('$apiUrl/os'),
+      body: jsonEncode(data),
+      headers: headers,
+    );
+
+    if (response.statusCode != 202) {
+      final body = jsonDecode(response.body);
+      throw Exception('Could not update OS: ${body['message']}');
     }
   }
 }

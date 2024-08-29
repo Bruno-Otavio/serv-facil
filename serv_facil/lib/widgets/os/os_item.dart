@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:serv_facil/models/os.dart';
+import 'package:serv_facil/widgets/modal/modal_details.dart';
 import 'package:serv_facil/widgets/os/os_item_info.dart';
 import 'package:serv_facil/widgets/small_button.dart';
 
@@ -43,7 +44,8 @@ class OsItem extends StatelessWidget {
                 os: os,
               ),
               os.executor != null
-                  ? OsItemInfo(title: 'Executor', content: os.executor!.nome, os: os)
+                  ? OsItemInfo(
+                      title: 'Executor', content: os.executor!.nome, os: os)
                   : const SizedBox(),
               OsItemInfo(
                 title: 'Aberto em:',
@@ -62,7 +64,12 @@ class OsItem extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: SmallButton(
-                  onTap: () {},
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => ModalDetails(os: os,),
+                    );
+                  },
                   text: 'Detalhes',
                 ),
               )
