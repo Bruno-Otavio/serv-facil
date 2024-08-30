@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:serv_facil/models/os.dart';
 import 'package:serv_facil/widgets/modal/modal_details.dart';
 import 'package:serv_facil/widgets/os/os_item_info.dart';
-import 'package:serv_facil/widgets/small_button.dart';
+import 'package:serv_facil/widgets/UI/small_button.dart';
 
 class OsItem extends StatelessWidget {
   const OsItem({
@@ -11,6 +11,10 @@ class OsItem extends StatelessWidget {
   });
 
   final Os os;
+
+  String _formatNumber(int number) {
+    return number.toString().padLeft(2, '0');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +54,14 @@ class OsItem extends StatelessWidget {
               OsItemInfo(
                 title: 'Aberto em:',
                 content:
-                    '${os.abertura.day}/${os.abertura.month}/${os.abertura.year}, ${os.abertura.hour}:${os.abertura.minute}',
+                    '${_formatNumber(os.abertura.day)}/${_formatNumber(os.abertura.month)}/${os.abertura.year}, ${_formatNumber(os.abertura.hour)}:${_formatNumber(os.abertura.minute)}',
                 os: os,
               ),
               os.encerramento != null
                   ? OsItemInfo(
                       title: 'Encerrado em:',
                       content:
-                          '${os.encerramento!.day}/${os.encerramento!.month}/${os.encerramento!.year}, ${os.encerramento!.hour}/${os.encerramento!.minute}',
+                          '${_formatNumber(os.encerramento!.day)}/${_formatNumber(os.encerramento!.month)}/${os.encerramento!.year}, ${_formatNumber(os.encerramento!.hour)}:${_formatNumber(os.encerramento!.minute)}',
                       os: os,
                     )
                   : const SizedBox(),
@@ -67,7 +71,9 @@ class OsItem extends StatelessWidget {
                   onTap: () {
                     showModalBottomSheet(
                       context: context,
-                      builder: (context) => ModalDetails(os: os,),
+                      builder: (context) => ModalDetails(
+                        os: os,
+                      ),
                     );
                   },
                   text: 'Detalhes',

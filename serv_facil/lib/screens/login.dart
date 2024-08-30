@@ -4,9 +4,9 @@ import 'package:serv_facil/main.dart';
 import 'package:serv_facil/models/user.dart';
 import 'package:serv_facil/provider/user_provider.dart';
 import 'package:serv_facil/services/user_service.dart';
-import 'package:serv_facil/widgets/button.dart';
-import 'package:serv_facil/widgets/text_input.dart';
-import 'package:serv_facil/widgets/text_input_toggle_eye.dart';
+import 'package:serv_facil/widgets/UI/button.dart';
+import 'package:serv_facil/widgets/UI/text_input.dart';
+import 'package:serv_facil/widgets/UI/text_input_toggle_eye.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

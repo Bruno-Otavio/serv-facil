@@ -4,6 +4,7 @@ import 'package:serv_facil/constants.dart';
 import 'package:serv_facil/models/os.dart';
 import 'package:http/http.dart' as http;
 import 'package:serv_facil/models/user.dart';
+import 'package:serv_facil/services/user_service.dart';
 
 class OsService {
   static Future<List<Os>> getOss({required String token}) async {
@@ -16,34 +17,59 @@ class OsService {
       final body = jsonDecode(response.body) as List;
 
       for (Map<String, dynamic> os in body) {
-        final futureColaborador = await http.get(
-          Uri.parse('$apiUrl/colaborador/${os['colaborador']}'),
-          headers: headers,
+        final User colaborador = await UserService.getUser(
+          token: token,
+          matricula: os['colaborador'],
         );
+        User? executor;
 
-        final futureExecutor = await http.get(
-          Uri.parse('$apiUrl/colaborador/${os['executor']}'),
-          headers: headers,
-        );
-        if (futureExecutor.statusCode == 200 ||
-            futureColaborador.statusCode == 200) {
-          final User colaborador = User.fromJson(
-            jsonDecode(futureColaborador.body) as Map<String, dynamic>,
+        if (os['executor'] != null) {
+          executor = await UserService.getUser(
+            token: token,
+            matricula: os['executor'],
           );
-          final User? executor;
-          if (jsonDecode(futureExecutor.body) != null) {
-            executor = User.fromJson(
-                jsonDecode(futureExecutor.body) as Map<String, dynamic>);
-            os.update('executor', (value) => executor);
-          }
-
-          os.update('colaborador', (value) => colaborador);
+          os.update('executor', (value) => executor);
         }
+        os.update('colaborador', (value) => colaborador);
       }
 
       return body.map((e) => Os.fromJson(e)).toList();
     } else {
       throw Exception('Could not fetch Oss.');
+    }
+  }
+
+  static Future<Os> getOs({
+    required String token,
+    required int osId,
+  }) async {
+    final headers = <String, String>{
+      'authorization': token,
+    };
+    final response =
+        await http.get(Uri.parse('$apiUrl/os/id/$osId'), headers: headers);
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body) as Map<String, dynamic>;
+
+      final User colaborador = await UserService.getUser(
+        token: token,
+        matricula: body['colaborador'],
+      );
+      User? executor;
+
+      if (body['executor'] != null) {
+        executor = await UserService.getUser(
+          token: token,
+          matricula: body['executor'],
+        );
+        body.update('executor', (value) => executor);
+      }
+      body.update('colaborador', (value) => colaborador);
+
+      return Os.fromJson(body);
+    } else {
+      throw Exception('Could not get Os.');
     }
   }
 

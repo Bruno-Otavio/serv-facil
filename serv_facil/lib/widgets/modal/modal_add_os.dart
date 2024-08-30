@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:serv_facil/models/user.dart';
 import 'package:serv_facil/provider/user_provider.dart';
 import 'package:serv_facil/services/os_service.dart';
-import 'package:serv_facil/widgets/button.dart';
-import 'package:serv_facil/widgets/text_input.dart';
+import 'package:serv_facil/widgets/UI/button.dart';
+import 'package:serv_facil/widgets/UI/text_input.dart';
 
 class ModalAddOs extends StatefulWidget {
   const ModalAddOs({super.key});
@@ -20,7 +20,8 @@ class _ModalAddOsState extends State<ModalAddOs> {
 
   void _addOs() async {
     User user = Provider.of<UserProvider>(context, listen: false).user;
-    await OsService.addOs(colaborador: user, descricao: _descriptionController.text);
+    await OsService.addOs(
+        colaborador: user, descricao: _descriptionController.text);
   }
 
   @override
@@ -40,7 +41,17 @@ class _ModalAddOsState extends State<ModalAddOs> {
             key: _formKey,
             child: Column(
               children: [
-                const SizedBox(height: 25),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.only(top: 25),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .secondary
+                        .withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
                 Text(
                   'Nova ordem de serviço',
                   style: TextStyle(
