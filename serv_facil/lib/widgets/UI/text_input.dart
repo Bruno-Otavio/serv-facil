@@ -7,7 +7,7 @@ class TextInput extends StatelessWidget {
     required this.validator,
     required this.hintText,
     this.keyboardType = TextInputType.text,
-    this.margin = const EdgeInsets.symmetric(vertical: 7),
+    this.margin = const EdgeInsets.symmetric(vertical: 5),
   });
 
   final TextEditingController controller;
@@ -28,7 +28,7 @@ class TextInput extends StatelessWidget {
           hintText: hintText,
           hintStyle: const TextStyle(fontSize: 18),
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              const EdgeInsets.symmetric(horizontal: 20, vertical: 19),
           filled: true,
           fillColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
           border: OutlineInputBorder(

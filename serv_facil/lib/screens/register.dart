@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:serv_facil/provider/user_provider.dart';
+import 'package:serv_facil/services/user_service.dart';
 import 'package:serv_facil/widgets/UI/button.dart';
 import 'package:serv_facil/widgets/UI/text_input.dart';
 
@@ -20,6 +23,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _pinConfirmationController =
       TextEditingController();
 
+  void _addUser() async {
+    final String token = Provider.of<UserProvider>(context).user.token!;
+
+    final data = <String, dynamic>{
+      'matricula': _matriculaController.text,
+      'nome': _nomeController.text,
+      'cargo': _cargoController.text,
+      'setor': _setorController.text,
+      'pin': _pinController.text,
+    };
+
+    await UserService.addUser(data: data, token: token);
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -34,6 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Image.asset(
           'assets/logomarca.png',
@@ -47,52 +65,91 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Cadastro de Colaborador',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ),
+              // Text(
+              //   'Cadastro de Colaborador',
+              //   style: TextStyle(
+              //     fontSize: 24,
+              //     fontWeight: FontWeight.bold,
+              //     color: Theme.of(context).colorScheme.secondary,
+              //   ),
+              // ),
               Form(
                 key: _formKey,
                 child: Column(
                   children: [
                     TextInput(
                       controller: _matriculaController,
-                      validator: (value) => null,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor insira uma matricula.';
+                        }
+                        return null;
+                      },
                       hintText: 'Matrícula',
                     ),
                     TextInput(
                       controller: _nomeController,
-                      validator: (value) => null,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor insira seu nome completo.';
+                        }
+                        return null;
+                      },
                       hintText: 'Nome Completo',
                     ),
                     TextInput(
                       controller: _cargoController,
-                      validator: (value) => null,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor insira seu cargo.';
+                        }
+                        return null;
+                      },
                       hintText: 'Cargo',
                     ),
                     TextInput(
                       controller: _setorController,
-                      validator: (value) => null,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor insira um setor.';
+                        }
+                        return null;
+                      },
                       hintText: 'Setor',
                     ),
                     TextInput(
                       controller: _pinController,
-                      validator: (value) => null,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor insira seu PIN.';
+                        }
+                        return null;
+                      },
                       hintText: 'PIN',
                     ),
                     TextInput(
                       controller: _pinConfirmationController,
-                      validator: (value) => null,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor confirme seu PIN.';
+                        } else if (value != _pinController.text) {
+                          return 'PINs não correspondentes.';
+                        }
+                        return null;
+                      },
                       hintText: 'Confirme seu PIN',
                     ),
                   ],
                 ),
               ),
-              Button(onTap: () {}, text: 'Cadastrar'),
+              Button(onTap: () {
+                if (_formKey.currentState!.validate()) {
+                  _addUser();
+                }
+              }, text: 'Cadastrar'),
             ],
           ),
         ),

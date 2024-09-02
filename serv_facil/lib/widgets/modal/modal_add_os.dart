@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:serv_facil/main.dart';
 import 'package:serv_facil/models/user.dart';
 import 'package:serv_facil/provider/user_provider.dart';
 import 'package:serv_facil/services/os_service.dart';
@@ -21,7 +22,11 @@ class _ModalAddOsState extends State<ModalAddOs> {
   void _addOs() async {
     User user = Provider.of<UserProvider>(context, listen: false).user;
     await OsService.addOs(
-        colaborador: user, descricao: _descriptionController.text);
+      colaborador: user,
+      descricao: _descriptionController.text,
+    );
+
+    navigatorKey.currentState?.pop();
   }
 
   @override
@@ -36,20 +41,23 @@ class _ModalAddOsState extends State<ModalAddOs> {
       height: MediaQuery.of(context).size.height,
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Form(
             key: _formKey,
             child: Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  margin: const EdgeInsets.only(top: 25),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .secondary
-                        .withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withOpacity(0.25),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
                   ),
                 ),
                 Text(

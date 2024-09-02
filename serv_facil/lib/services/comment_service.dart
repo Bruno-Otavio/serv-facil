@@ -15,6 +15,7 @@ class CommentService {
   }) async {
     final headers = <String, String>{
       'authorization': token,
+      "content-type": "application/json",
     };
     final response =
         await http.get(Uri.parse('$apiUrl/comentario/$osId'), headers: headers);
@@ -24,7 +25,8 @@ class CommentService {
       final List comentarios = body['comentarios'];
 
       for (Map comment in comentarios) {
-        final User colaborador = await UserService.getUser(token: token, matricula: comment['colaborador']);
+        final User colaborador = await UserService.getUser(
+            token: token, matricula: comment['colaborador']);
         final Os os = await OsService.getOs(token: token, osId: osId);
 
         comment.update('colaborador', (value) => colaborador);
@@ -34,6 +36,26 @@ class CommentService {
       return comentarios.map((e) => Comment.fromJson(e)).toList();
     } else {
       throw Exception('Could not fetch comments.');
+    }
+  }
+
+  static Future<void> addComment({
+    required Map<String, dynamic> data,
+    required String token,
+  }) async {
+    final headers = <String, String>{
+      'authorization': token,
+      "content-type": "application/json"
+    };
+
+    final response = await http.post(
+      Uri.parse('$apiUrl/comentario'),
+      body: jsonEncode(data),
+      headers: headers,
+    );
+
+    if (response.statusCode != 201) {
+      throw const FormatException('Could not create Comment.');
     }
   }
 }

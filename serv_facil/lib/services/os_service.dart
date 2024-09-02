@@ -10,6 +10,7 @@ class OsService {
   static Future<List<Os>> getOss({required String token}) async {
     final headers = <String, String>{
       'authorization': token,
+      "content-type": "application/json",
     };
     final response = await http.get(Uri.parse('$apiUrl/os'), headers: headers);
 
@@ -45,6 +46,7 @@ class OsService {
   }) async {
     final headers = <String, String>{
       'authorization': token,
+      "content-type": "application/json",
     };
     final response =
         await http.get(Uri.parse('$apiUrl/os/id/$osId'), headers: headers);
@@ -84,11 +86,14 @@ class OsService {
 
     final headers = <String, String>{
       'authorization': colaborador.token!,
+      "content-type": "application/json",
     };
+
+    final parsedData = jsonEncode(data);
 
     final response = await http.post(
       Uri.parse('$apiUrl/os'),
-      body: jsonEncode(data),
+      body: parsedData,
       headers: headers,
     );
 
@@ -110,6 +115,7 @@ class OsService {
 
     final headers = <String, String>{
       'authorization': token,
+      "content-type": "application/json",
     };
 
     final response = await http.patch(
@@ -121,6 +127,19 @@ class OsService {
     if (response.statusCode != 202) {
       final body = jsonDecode(response.body);
       throw Exception('Could not update OS: ${body['message']}');
+    }
+  }
+
+  static Future<void> removeOs({ required int osId, required String token}) async {
+    final headers = <String, String>{
+      'authorization': token,
+      "content-type": "application/json"
+    };
+
+    final response = await http.delete(Uri.parse('$apiUrl/os/$osId'), headers: headers);
+
+    if (response.statusCode != 204) {
+      throw Exception('Could not delete OS.');
     }
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:serv_facil/main.dart';
 import 'package:serv_facil/models/comment.dart';
 import 'package:serv_facil/models/os.dart';
 import 'package:serv_facil/models/user.dart';
@@ -26,8 +28,6 @@ class _ModalDetailsState extends State<ModalDetails> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _commentController = TextEditingController();
 
-  bool _commentSucess = false;
-
   User? user;
 
   void _updateOs() async {
@@ -36,9 +36,47 @@ class _ModalDetailsState extends State<ModalDetails> {
       descricao: _controller.text,
       token: Provider.of<UserProvider>(context, listen: false).user.token!,
     );
+
+    if (!mounted) return;
+
+    navigatorKey.currentState?.pop();
+
+    Fluttertoast.showToast(
+      msg: 'Alterações salvas com sucesso!',
+      backgroundColor: Theme.of(context).colorScheme.secondary,
+    );
   }
 
-  void _removeOs() async {}
+  void _removeOs() async {
+    final String token =
+        Provider.of<UserProvider>(context, listen: false).user.token!;
+    await OsService.removeOs(osId: widget.os.id, token: token);
+    navigatorKey.currentState?.pop();
+  }
+
+  void _addComment() async {
+    try {
+      final User user = Provider.of<UserProvider>(context, listen: false).user;
+
+      final data = <String, dynamic>{
+        'os': widget.os.id,
+        'colaborador': user.matricula,
+        'comentario': _commentController.text
+      };
+
+      CommentService.addComment(data: data, token: user.token!);
+
+      Fluttertoast.showToast(
+        msg: 'Comentário adicionado com sucesso!',
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+      );
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: 'Não foi possivel adicionar seu comentário.',
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+      );
+    }
+  }
 
   @override
   void initState() {
@@ -134,11 +172,8 @@ class _ModalDetailsState extends State<ModalDetails> {
                   ),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState != ConnectionState.done) {
-                      return const InfoContainerWidget(
-                        margin: EdgeInsets.only(top: 25),
-                        child: Center(
-                          child: LinearProgressIndicator(),
-                        ),
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
                     }
                     if (snapshot.hasError) {
@@ -255,16 +290,8 @@ class _ModalDetailsState extends State<ModalDetails> {
                     IconButton(
                       onPressed: () {
                         if (_commentController.text != '') {
-                          setState(() {
-                            _commentSucess = !_commentSucess;
-                          });
-                          Future.delayed(const Duration(seconds: 3), () {
-                            if (mounted) {
-                              setState(() {
-                                _commentSucess = !_commentSucess;
-                              });
-                            }
-                          });
+                          _addComment();
+                          setState(() {});
                         }
                       },
                       icon: Icon(
@@ -284,11 +311,8 @@ class _ModalDetailsState extends State<ModalDetails> {
                   ),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState != ConnectionState.done) {
-                      return const InfoContainerWidget(
-                        margin: EdgeInsets.symmetric(vertical: 7),
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
                     }
                     if (snapshot.hasError) {
@@ -302,7 +326,20 @@ class _ModalDetailsState extends State<ModalDetails> {
                           itemCount: data.length,
                           itemBuilder: (context, index) {
                             final Comment comment = data[index];
-                            return Text(comment.comentario);
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 7),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    comment.comentario,
+                                    maxLines: 2,
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
+                                  Text('- ${comment.colaborador.nome}'),
+                                ],
+                              ),
+                            );
                           },
                         ),
                       );

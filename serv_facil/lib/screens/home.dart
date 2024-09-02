@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:serv_facil/main.dart';
 import 'package:serv_facil/models/os.dart';
 import 'package:serv_facil/models/user.dart';
 import 'package:serv_facil/provider/user_provider.dart';
@@ -17,9 +18,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   User? user;
 
+  late Future _futureOss;
+
   @override
   Widget build(BuildContext context) {
     user = Provider.of<UserProvider>(context).user;
+    _futureOss = OsService.getOss(token: user!.token!);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -31,6 +35,18 @@ class _HomeScreenState extends State<HomeScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        leading: IconButton(
+          onPressed: () =>
+              navigatorKey.currentState?.pushReplacementNamed('/login'),
+          icon: Transform.flip(
+            flipX: true,
+            child: Icon(
+              Icons.exit_to_app,
+              size: 30,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
         actions: [
           Image.asset(
             'assets/icone.png',
@@ -39,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: OsService.getOss(token: user!.token!),
+        future: _futureOss,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final data = snapshot.data!;
@@ -71,7 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Theme.of(context).colorScheme.onTertiary,
         ),
       ),
-      drawer: Drawer(),
     );
   }
 }

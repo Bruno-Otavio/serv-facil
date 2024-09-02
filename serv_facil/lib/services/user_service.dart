@@ -25,16 +25,37 @@ class UserService {
     }
   }
 
-  static Future<User> getUser({required String token, required String matricula}) async {
+  static Future<User> getUser(
+      {required String token, required String matricula}) async {
     final headers = <String, String>{
       'authorization': token,
+      "content-type": "application/json",
     };
-    final response = await http.get(Uri.parse('$apiUrl/colaborador/$matricula'), headers: headers);
+    final response = await http.get(Uri.parse('$apiUrl/colaborador/$matricula'),
+        headers: headers);
 
     if (response.statusCode == 200) {
       return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     } else {
       throw Exception('Could not fetch Oss.');
+    }
+  }
+
+  static Future<void> addUser(
+      {required Map<String, dynamic> data, required String token}) async {
+    final headers = <String, String>{
+      'authorization': token,
+      "content-type": "application/json",
+    };
+
+    final response = await http.post(
+      Uri.parse('$apiUrl/colaborador'),
+      body: jsonEncode(data),
+      headers: headers,
+    );
+
+    if (response.statusCode != 201) {
+      throw Exception('Could not add User.');
     }
   }
 }
