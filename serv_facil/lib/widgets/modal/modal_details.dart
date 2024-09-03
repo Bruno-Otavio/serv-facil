@@ -39,7 +39,7 @@ class _ModalDetailsState extends State<ModalDetails> {
 
     if (!mounted) return;
 
-    navigatorKey.currentState?.pop();
+    navigatorKey.currentState?.pop(true);
 
     Fluttertoast.showToast(
       msg: 'Alterações salvas com sucesso!',
@@ -51,7 +51,10 @@ class _ModalDetailsState extends State<ModalDetails> {
     final String token =
         Provider.of<UserProvider>(context, listen: false).user.token!;
     await OsService.removeOs(osId: widget.os.id, token: token);
-    navigatorKey.currentState?.pop();
+
+    if (!mounted) return;
+
+    navigatorKey.currentState?.pop(true);
   }
 
   void _addComment() async {
@@ -369,7 +372,64 @@ class _ModalDetailsState extends State<ModalDetails> {
                     width: 10,
                   ),
                   Expanded(
-                    child: SmallButton(onTap: _removeOs, text: 'Excluir'),
+                    child: SmallButton(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Confirme sua ação'),
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: [
+                                    Text(
+                                      'Você tem certeza disso?',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      navigatorKey.currentState?.pop(),
+                                  child: Text(
+                                    'Cancelar',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    _removeOs();
+                                    navigatorKey.currentState?.pop();
+                                  },
+                                  child: Text(
+                                    'Confirmar',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          Theme.of(context).colorScheme.tertiary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      text: 'Excluir',
+                    ),
                   ),
                 ],
               ),

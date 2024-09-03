@@ -26,7 +26,7 @@ class _ModalAddOsState extends State<ModalAddOs> {
       descricao: _descriptionController.text,
     );
 
-    navigatorKey.currentState?.pop();
+    navigatorKey.currentState?.pop(true);
   }
 
   @override

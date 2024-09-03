@@ -20,10 +20,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late Future _futureOss;
 
+  Future<void> _refresh() async {
+    final String token = Provider.of<UserProvider>(context, listen: false).user.token!;
+    setState(() {
+      _futureOss = OsService.getOss(token: token);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     user = Provider.of<UserProvider>(context).user;
-    _futureOss = OsService.getOss(token: user!.token!);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -54,25 +66,28 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: _futureOss,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final data = snapshot.data!;
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                final Os os = data[index];
-                return OsItem(os: os);
-              },
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: FutureBuilder(
+          future: _futureOss,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final data = snapshot.data!;
+              return ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context, index) {
+                  final Os os = data[index];
+                  return OsItem(os: os);
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            }
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
