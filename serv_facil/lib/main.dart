@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:serv_facil/provider/user_provider.dart';
+import 'package:serv_facil/screens/home.dart';
 import 'package:serv_facil/screens/login.dart';
 import 'package:serv_facil/theme/light_theme.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => UserProvider(),
+    child: const MainApp(),
+  ));
 }
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -20,6 +26,7 @@ class MainApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen(),
       },
     );
   }
