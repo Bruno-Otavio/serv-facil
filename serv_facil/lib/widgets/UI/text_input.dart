@@ -19,7 +19,7 @@ class TextInput extends StatelessWidget {
     return Padding(
       padding: margin,
       child: TextFormField(
-        validator: (value) => null,
+        validator: validator,
         controller: controller,
         obscureText: false,
         decoration: InputDecoration(

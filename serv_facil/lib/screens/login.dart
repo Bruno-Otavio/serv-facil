@@ -4,9 +4,9 @@ import 'package:serv_facil/main.dart';
 import 'package:serv_facil/model/user.dart';
 import 'package:serv_facil/provider/user_provider.dart';
 import 'package:serv_facil/services/user_service.dart';
-import 'package:serv_facil/widgets/button.dart';
-import 'package:serv_facil/widgets/outlinedd_button.dart';
-import 'package:serv_facil/widgets/text_input.dart';
+import 'package:serv_facil/widgets/UI/button.dart';
+import 'package:serv_facil/widgets/UI/outlinedd_button.dart';
+import 'package:serv_facil/widgets/UI/text_input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,15 +23,22 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login() async {
     try {
-      final User user = await UserService.login(
+      final User colaborador = await UserService.login(
         matricula: _matriculaController.text,
         pin: _pinController.text,
       );
-      Provider.of<UserProvider>(context, listen: false).user = user;
+      Provider.of<UserProvider>(context, listen: false).user = colaborador;
       navigatorKey.currentState?.pushReplacementNamed('/home');
     } catch (e) {
       print('invalid matricula or pin');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _matriculaController.text == '200';
+    _pinController.text == '1234';
   }
 
   @override
@@ -70,20 +77,35 @@ class _LoginScreenState extends State<LoginScreen> {
               Column(
                 children: [
                   TextInput(
-                    validator: (value) => null,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira sua matrícula.';
+                      }
+                      return null;
+                    },
                     controller: _matriculaController,
                     text: 'Matrícula',
                     margin: const EdgeInsets.symmetric(vertical: 5),
                   ),
                   TextInput(
-                    validator: (value) => null,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, insira seu PIN.';
+                      }
+                      return null;
+                    },
                     controller: _pinController,
                     text: 'PIN',
                     margin: const EdgeInsets.symmetric(vertical: 5),
                   ),
                   Button(
-                    onPressed: _login,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _login();
+                      }
+                    },
                     text: 'Entrar',
+                    color: Theme.of(context).colorScheme.tertiary,
                     margin: const EdgeInsets.symmetric(vertical: 5),
                   ),
                 ],

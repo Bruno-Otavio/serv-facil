@@ -7,7 +7,7 @@ class User {
     required this.setor,
   });
 
-  final String token;
+  final String? token;
   final String nome;
   final String matricula;
   final String cargo;
@@ -16,14 +16,13 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) {
     return switch (json) {
       {
-        'token': String token,
         'matricula': String matricula,
         'cargo': String cargo,
         'setor': String setor,
         'nome': String nome,
       } =>
         User(
-          token: token,
+          token: json['token'],
           nome: nome,
           matricula: matricula,
           cargo: cargo,

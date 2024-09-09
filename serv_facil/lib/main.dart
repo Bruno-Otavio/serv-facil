@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:serv_facil/provider/os_provider.dart';
 import 'package:serv_facil/provider/user_provider.dart';
 import 'package:serv_facil/screens/home.dart';
 import 'package:serv_facil/screens/login.dart';
 import 'package:serv_facil/theme/light_theme.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => UserProvider(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => UserProvider()),
+      ChangeNotifierProvider(create: (context) => OsProvider()),
+    ],
     child: const MainApp(),
   ));
 }
