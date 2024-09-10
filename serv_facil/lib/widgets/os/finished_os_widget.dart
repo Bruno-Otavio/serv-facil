@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:serv_facil/main.dart';
 import 'package:serv_facil/model/os.dart';
+import 'package:serv_facil/screens/details.dart';
 import 'package:serv_facil/widgets/UI/button.dart';
 import 'package:serv_facil/widgets/info_row.dart';
 
-class TakenOsWidget extends StatelessWidget {
-  const TakenOsWidget({
+class FinishedOsWidget extends StatelessWidget {
+  const FinishedOsWidget({
     super.key,
     required this.os,
   });
 
   final Os os;
+
+  String _formatNumber(int number) {
+    return number.toString().padLeft(2, '0');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +24,7 @@ class TakenOsWidget extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondary,
+          color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(3),
         ),
         child: Column(
@@ -27,7 +33,7 @@ class TakenOsWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.tertiary,
+                color: Theme.of(context).colorScheme.secondary,
                 borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(3),
                   topLeft: Radius.circular(3),
@@ -52,28 +58,41 @@ class TakenOsWidget extends StatelessWidget {
                     label: 'Colaborador',
                     info:
                         '${os.colaborador.nome.split(' ')[0]} ${os.colaborador.nome.split(' ')[1]}',
+                    color: Theme.of(context).colorScheme.onTertiary,
                   ),
-                  const InfoRow(label: 'Executor', info: ''),
                   InfoRow(
-                      label: 'Início',
-                      info:
-                          '${os.abertura.day}/${os.abertura.month}/${os.abertura.year}'),
+                    label: 'Executor',
+                    info: os.executor == null
+                        ? 'Não possui'
+                        : '${os.colaborador.nome.split(' ')[0]} ${os.colaborador.nome.split(' ')[1]}',
+                    color: Theme.of(context).colorScheme.onTertiary,
+                  ),
+                  InfoRow(
+                    label: 'Início',
+                    info:
+                        '${_formatNumber(os.abertura.day)}/${_formatNumber(os.abertura.month)}/${os.abertura.year}',
+                    color: Theme.of(context).colorScheme.onTertiary,
+                  ),
+                  InfoRow(
+                    label: 'Encerramento',
+                    info:
+                        '${_formatNumber(os.encerramento!.day)}/${_formatNumber(os.encerramento!.month)}/${os.encerramento!.year}',
+                    color: Theme.of(context).colorScheme.onTertiary,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Button(
-                          onPressed: () {},
-                          text: 'Encerrar',
-                          color: Theme.of(context).colorScheme.tertiary,
-                          width: double.minPositive,
-                        ),
                         const SizedBox(width: 10),
                         Button(
-                          onPressed: () {},
+                          onPressed: () => navigatorKey.currentState?.push(
+                            MaterialPageRoute(
+                              builder: (context) => DetailsScreen(os: os),
+                            ),
+                          ),
                           text: 'Detalhes',
-                          color: Theme.of(context).colorScheme.tertiary,
+                          color: Theme.of(context).colorScheme.secondary,
                           width: double.minPositive,
                         ),
                       ],

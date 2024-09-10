@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:serv_facil/provider/os_provider.dart';
 import 'package:serv_facil/provider/user_provider.dart';
 import 'package:serv_facil/screens/home.dart';
 import 'package:serv_facil/screens/login.dart';
+import 'package:serv_facil/screens/production.dart';
+import 'package:serv_facil/screens/register.dart';
 import 'package:serv_facil/theme/light_theme.dart';
 
 void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => UserProvider()),
-      ChangeNotifierProvider(create: (context) => OsProvider()),
     ],
     child: const MainApp(),
   ));
@@ -30,7 +30,9 @@ class MainApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => const LoginScreen(),
+        '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
+        '/production': (context) => const ProductionScreen(),
       },
     );
   }

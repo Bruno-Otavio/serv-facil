@@ -5,10 +5,12 @@ class InfoRow extends StatelessWidget {
     super.key,
     required this.label,
     required this.info,
+    required this.color,
   });
 
   final String label;
   final String info;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +23,15 @@ class InfoRow extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 20,
-              color: Theme.of(context).colorScheme.onTertiary,
+              color: color,
+              fontWeight: FontWeight.w700
             ),
           ),
           Text(
             info,
             style: TextStyle(
               fontSize: 20,
-              color: Theme.of(context).colorScheme.onTertiary,
+              color: color,
               overflow: TextOverflow.ellipsis,
             ),
           ),

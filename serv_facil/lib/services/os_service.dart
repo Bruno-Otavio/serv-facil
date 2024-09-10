@@ -7,9 +7,9 @@ import 'package:serv_facil/model/user.dart';
 import 'package:serv_facil/services/user_service.dart';
 
 class OsService {
-  static Future<List<Os>> getOss({required String token}) async {
+  static Future<List<Os>> getOpenOss({required String token}) async {
     final response = await http.get(
-      Uri.parse('$apiUrl/os'),
+      Uri.parse('$apiUrl/os/abertas'),
       headers: {
         'authorization': token,
       },
@@ -19,10 +19,12 @@ class OsService {
       final List body = jsonDecode(response.body);
 
       for (Map data in body) {
-        final User colaborador = await UserService.getColaborador(token: token, id: data['colaborador']);
+        final User colaborador = await UserService.getColaborador(
+            token: token, id: data['colaborador']);
 
         if (data['executor'] != null) {
-          final User executor = await UserService.getColaborador(token: token, id: data['executor']);
+          final User executor = await UserService.getColaborador(
+              token: token, id: data['executor']);
           data.update('executor', (value) => executor);
         }
         data.update('colaborador', (value) => colaborador);
@@ -30,7 +32,36 @@ class OsService {
 
       return body.map((e) => Os.fromJson(e)).toList();
     } else {
-      throw Exception('Could not get Oss.');
+      throw Exception('Could not fetch Oss.');
+    }
+  }
+
+  static Future<List<Os>> getClosedOss({required String token}) async {
+    final response = await http.get(
+      Uri.parse('$apiUrl/os/fechadas'),
+      headers: {
+        'authorization': token,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List body = jsonDecode(response.body);
+
+      for (Map data in body) {
+        final User colaborador = await UserService.getColaborador(
+            token: token, id: data['colaborador']);
+
+        if (data['executor'] != null) {
+          final User executor = await UserService.getColaborador(
+              token: token, id: data['executor']);
+          data.update('executor', (value) => executor);
+        }
+        data.update('colaborador', (value) => colaborador);
+      }
+
+      return body.map((e) => Os.fromJson(e)).toList();
+    } else {
+      throw Exception('Could not fetch closed Oss.');
     }
   }
 }

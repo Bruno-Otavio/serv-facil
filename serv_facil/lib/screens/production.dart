@@ -5,17 +5,16 @@ import 'package:serv_facil/model/user.dart';
 import 'package:serv_facil/provider/user_provider.dart';
 import 'package:serv_facil/services/os_service.dart';
 import 'package:serv_facil/widgets/UI/app_drawer.dart';
-import 'package:serv_facil/widgets/os/open_os_widget.dart';
-import 'package:serv_facil/widgets/os/taken_os_widget.dart';
+import 'package:serv_facil/widgets/os/finished_os_widget.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class ProductionScreen extends StatefulWidget {
+  const ProductionScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<ProductionScreen> createState() => _ProductionScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _ProductionScreenState extends State<ProductionScreen> {
   User? colaborador;
 
   @override
@@ -24,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Home',
+          'Produção',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w700,
@@ -44,28 +43,22 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.only(top: 5, right: 10, left: 10),
         child: FutureBuilder(
-          future: OsService.getOpenOss(token: colaborador!.token!),
+          future: OsService.getClosedOss(token: colaborador!.token!),
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
             if (snapshot.hasError) {
               return Text('${snapshot.error}');
-            } else if (snapshot.hasData) {
+            } else {
               final data = snapshot.data!;
               return ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) {
                   final Os os = data[index];
-                  return os.executor?.matricula == colaborador!.matricula
-                      ? TakenOsWidget(os: os)
-                      : OpenOsWidget(os: os);
+                  return FinishedOsWidget(os: os);
                 },
               );
-            } else {
-              return const Text('Nenhuma Os disponível no momento');
             }
           },
         ),

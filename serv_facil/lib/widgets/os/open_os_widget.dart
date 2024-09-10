@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:serv_facil/main.dart';
 import 'package:serv_facil/model/os.dart';
+import 'package:serv_facil/screens/details.dart';
 import 'package:serv_facil/widgets/UI/button.dart';
 import 'package:serv_facil/widgets/info_row.dart';
 
@@ -10,6 +12,10 @@ class OpenOsWidget extends StatelessWidget {
   });
 
   final Os os;
+
+  String _formatNumber(int number) {
+    return number.toString().padLeft(2, '0');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +58,21 @@ class OpenOsWidget extends StatelessWidget {
                     label: 'Colaborador',
                     info:
                         '${os.colaborador.nome.split(' ')[0]} ${os.colaborador.nome.split(' ')[1]}',
+                    color: Theme.of(context).colorScheme.onTertiary,
                   ),
-                  const InfoRow(label: 'Executor', info: ''),
                   InfoRow(
-                      label: 'Início',
-                      info:
-                          '${os.abertura.day}/${os.abertura.month}/${os.abertura.year}'),
+                    label: 'Executor',
+                    info: os.executor == null
+                        ? 'Não possui'
+                        : '${os.colaborador.nome.split(' ')[0]} ${os.colaborador.nome.split(' ')[1]}',
+                    color: Theme.of(context).colorScheme.onTertiary,
+                  ),
+                  InfoRow(
+                    label: 'Início',
+                    info:
+                        '${_formatNumber(os.abertura.day)}/${_formatNumber(os.abertura.month)}/${os.abertura.year}',
+                    color: Theme.of(context).colorScheme.onTertiary,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Row(
@@ -65,13 +80,17 @@ class OpenOsWidget extends StatelessWidget {
                       children: [
                         Button(
                           onPressed: () {},
-                          text: 'Encerrar',
+                          text: 'Atribuir a mim',
                           color: Theme.of(context).colorScheme.primary,
                           width: double.minPositive,
                         ),
                         const SizedBox(width: 10),
                         Button(
-                          onPressed: () {},
+                          onPressed: () => navigatorKey.currentState?.push(
+                            MaterialPageRoute(
+                              builder: (context) => DetailsScreen(os: os),
+                            ),
+                          ),
                           text: 'Detalhes',
                           color: Theme.of(context).colorScheme.primary,
                           width: double.minPositive,

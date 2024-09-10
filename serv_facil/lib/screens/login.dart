@@ -51,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Form(
         key: _formKey,
         child: Padding(
@@ -111,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               OutlineddButton(
-                onPressed: () {},
+                onPressed: () => navigatorKey.currentState?.pushNamed('/register'),
                 text: 'Cadastre-se',
                 margin: const EdgeInsets.only(top: 50),
               ),
