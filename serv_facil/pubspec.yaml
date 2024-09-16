@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_native_splash: ^2.4.1
+  fluttertoast: ^8.2.8
   google_maps_flutter: ^2.9.0
   http: ^1.2.2
   provider: ^6.1.2

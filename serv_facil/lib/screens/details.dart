@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:serv_facil/model/os.dart';
-import 'package:serv_facil/widgets/UI/button.dart';
-import 'package:serv_facil/widgets/info_row.dart';
+import 'package:serv_facil/model/user.dart';
+import 'package:serv_facil/provider/user_provider.dart';
+import 'package:serv_facil/widgets/UI/modal/comments_modal.dart';
+import 'package:serv_facil/widgets/UI/form_widgets/button.dart';
+import 'package:serv_facil/widgets/UI/info_row.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
@@ -16,6 +21,8 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
+  User? colaborador;
+
   String _formatNumber(int number) {
     return number.toString().padLeft(2, '0');
   }
@@ -29,6 +36,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    colaborador = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -43,9 +51,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Descrição',),
-            Text(widget.os.descricao),
+            const Text(
+              'Descrição',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: Text(
+                widget.os.descricao,
+                style: const TextStyle(fontSize: 20),
+              ),
+            ),
             InfoRow(
               label: 'Executor',
               info: widget.os.executor != null
@@ -65,7 +86,34 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   : 'Não finalizado',
               color: Theme.of(context).colorScheme.onPrimary,
             ),
-            Button(onPressed: () {}, text: 'Visualizar Comentários', color: Theme.of(context).colorScheme.tertiary),
+            Button(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return CommentsModal(
+                      colaborador: colaborador,
+                      os: widget.os,
+                    );
+                  },
+                );
+              },
+              text: 'Visualizar Comentários',
+              color: Theme.of(context).colorScheme.tertiary,
+              margin: const EdgeInsets.symmetric(vertical: 5),
+            ),
+            // Expanded(
+            //   child: GoogleMap(
+            //     initialCameraPosition: CameraPosition(
+            //       target: LatLng(widget.os.latitude, widget.os.longitude),
+            //     ),
+            //     rotateGesturesEnabled: false,
+            //     zoomControlsEnabled: false,
+            //     zoomGesturesEnabled: false,
+            //     compassEnabled: false,
+            //     scrollGesturesEnabled: false,
+            //   ),
+            // ),
           ],
         ),
       ),

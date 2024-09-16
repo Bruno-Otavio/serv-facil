@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serv_facil/provider/user_provider.dart';
+import 'package:serv_facil/screens/dashboard.dart';
 import 'package:serv_facil/screens/home.dart';
 import 'package:serv_facil/screens/login.dart';
 import 'package:serv_facil/screens/production.dart';
@@ -33,6 +34,7 @@ class MainApp extends StatelessWidget {
         '/register': (context) => const RegisterScreen(),
         '/home': (context) => const HomeScreen(),
         '/production': (context) => const ProductionScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
       },
     );
   }

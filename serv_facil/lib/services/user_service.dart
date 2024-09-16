@@ -30,10 +30,10 @@ class UserService {
 
   static Future<User> getColaborador({
     required String token,
-    required String id,
+    required String matricula,
   }) async {
     final response = await http.get(
-      Uri.parse('$apiUrl/colaborador/$id'),
+      Uri.parse('$apiUrl/colaborador/$matricula'),
       headers: {
         'authorization': token,
       },
@@ -43,6 +43,20 @@ class UserService {
       return User.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
     } else {
       throw Exception('Could not get Colaborador.');
+    }
+  }
+
+  static Future<void> addColaborador({
+    required Map<String, dynamic> data,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$apiUrl/colaborador'),
+      body: jsonEncode(data),
+      headers: {'content-type': 'application/json'},
+    );
+    
+    if (response.statusCode != 201) {
+      throw Exception('Could not add Colaborador.');
     }
   }
 }

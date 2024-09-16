@@ -52,7 +52,7 @@ class AppDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () => navigatorKey.currentState?.pushReplacementNamed('/dashboard'),
             leading: Icon(
               Icons.dashboard_outlined,
               size: 32,

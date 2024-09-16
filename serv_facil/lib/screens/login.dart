@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:serv_facil/main.dart';
 import 'package:serv_facil/model/user.dart';
 import 'package:serv_facil/provider/user_provider.dart';
 import 'package:serv_facil/services/user_service.dart';
-import 'package:serv_facil/widgets/UI/button.dart';
-import 'package:serv_facil/widgets/UI/outlinedd_button.dart';
-import 'package:serv_facil/widgets/UI/text_input.dart';
+import 'package:serv_facil/widgets/UI/form_widgets/button.dart';
+import 'package:serv_facil/widgets/UI/form_widgets/outlinedd_button.dart';
+import 'package:serv_facil/widgets/UI/form_widgets/text_input.dart';
+import 'package:serv_facil/widgets/UI/form_widgets/text_input_toggle.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,10 +29,21 @@ class _LoginScreenState extends State<LoginScreen> {
         matricula: _matriculaController.text,
         pin: _pinController.text,
       );
+
+      Fluttertoast.showToast(
+        msg: 'Login realizado com sucesso!',
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        fontSize: 16
+      );
+
       Provider.of<UserProvider>(context, listen: false).user = colaborador;
       navigatorKey.currentState?.pushReplacementNamed('/home');
     } catch (e) {
-      print('invalid matricula or pin');
+      Fluttertoast.showToast(
+        msg: 'Matrícula ou PIN inválidos.',
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        fontSize: 16
+      );
     }
   }
 
@@ -86,9 +99,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     controller: _matriculaController,
                     text: 'Matrícula',
+                    keyboardType: TextInputType.number,
                     margin: const EdgeInsets.symmetric(vertical: 5),
                   ),
-                  TextInput(
+                  TextInputToggle(
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, insira seu PIN.';
@@ -97,6 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     controller: _pinController,
                     text: 'PIN',
+                    keyboardType: TextInputType.number,
                     margin: const EdgeInsets.symmetric(vertical: 5),
                   ),
                   Button(
@@ -112,7 +127,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               OutlineddButton(
-                onPressed: () => navigatorKey.currentState?.pushNamed('/register'),
+                onPressed: () =>
+                    navigatorKey.currentState?.pushNamed('/register'),
                 text: 'Cadastre-se',
                 margin: const EdgeInsets.only(top: 50),
               ),

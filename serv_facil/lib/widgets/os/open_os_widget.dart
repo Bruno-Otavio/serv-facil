@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:serv_facil/main.dart';
 import 'package:serv_facil/model/os.dart';
 import 'package:serv_facil/screens/details.dart';
-import 'package:serv_facil/widgets/UI/button.dart';
-import 'package:serv_facil/widgets/info_row.dart';
+import 'package:serv_facil/widgets/UI/form_widgets/button.dart';
+import 'package:serv_facil/widgets/UI/info_row.dart';
 
 class OpenOsWidget extends StatelessWidget {
   const OpenOsWidget({

@@ -7,6 +7,11 @@ class LightTheme {
     appBarTheme: const AppBarTheme(
       centerTitle: true,
     ),
+    dropdownMenuTheme: const DropdownMenuThemeData(
+      textStyle: TextStyle(
+        fontFamily: 'Poppins',
+      ),
+    ),
     fontFamily: 'Poppins',
     colorScheme: const ColorScheme.light(
       onPrimary: Color(0xFF000000),
