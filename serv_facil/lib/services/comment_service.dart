@@ -38,4 +38,22 @@ class CommentService {
       throw Exception('Could not fetch comments.');
     }
   }
+
+  static Future<void> addComment({
+    required String token,
+    required Map<String, dynamic> data,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$apiUrl/comenatiro'),
+      body: jsonEncode(data),
+      headers: {
+        'authorization': token,
+        'content-type': 'application/json',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Could not add comment.');
+    }
+  }
 }

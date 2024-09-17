@@ -54,71 +54,80 @@ class _DetailsScreenState extends State<DetailsScreen> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Descrição',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Text(
-                widget.os.descricao,
-                style: const TextStyle(fontSize: 20),
-              ),
-            ),
-            InfoRow(
-              label: 'Executor',
-              info: widget.os.executor != null
-                  ? widget.os.executor!.nome
-                  : 'Não possui',
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-            InfoRow(
-              label: 'Início',
-              info: _formatDate(widget.os.abertura),
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-            InfoRow(
-              label: 'Encerramento',
-              info: widget.os.encerramento != null
-                  ? _formatDate(widget.os.encerramento!)
-                  : 'Não finalizado',
-              color: Theme.of(context).colorScheme.onPrimary,
-            ),
-            Button(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return CommentsModal(
-                      colaborador: colaborador,
-                      os: widget.os,
+              children: [
+                const Text(
+                  'Descrição',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    widget.os.descricao,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ),
+                InfoRow(
+                  label: 'Executor',
+                  info: widget.os.executor != null
+                      ? widget.os.executor!.nome
+                      : 'Não possui',
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+                InfoRow(
+                  label: 'Início',
+                  info: _formatDate(widget.os.abertura),
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+                InfoRow(
+                  label: 'Encerramento',
+                  info: widget.os.encerramento != null
+                      ? _formatDate(widget.os.encerramento!)
+                      : 'Não finalizado',
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+                Button(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return CommentsModal(
+                          colaborador: colaborador,
+                          os: widget.os,
+                        );
+                      },
                     );
                   },
-                );
-              },
-              text: 'Visualizar Comentários',
-              color: Theme.of(context).colorScheme.tertiary,
-              margin: const EdgeInsets.symmetric(vertical: 5),
+                  text: 'Visualizar Comentários',
+                  color: Theme.of(context).colorScheme.tertiary,
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                ),
+              ],
             ),
-            // Expanded(
-            //   child: GoogleMap(
-            //     initialCameraPosition: CameraPosition(
-            //       target: LatLng(widget.os.latitude, widget.os.longitude),
-            //     ),
-            //     rotateGesturesEnabled: false,
-            //     zoomControlsEnabled: false,
-            //     zoomGesturesEnabled: false,
-            //     compassEnabled: false,
-            //     scrollGesturesEnabled: false,
-            //   ),
-            // ),
-          ],
-        ),
+          ),
+          // Expanded(
+          //   child: GoogleMap(
+          //     initialCameraPosition: CameraPosition(
+          //       target: LatLng(widget.os.latitude, widget.os.longitude),
+          //       zoom: 13,
+          //     ),
+          //     markers: {
+          //       Marker(
+          //         markerId: const MarkerId('Local da Os'),
+          //         icon: BitmapDescriptor.defaultMarker,
+          //         position: LatLng(widget.os.latitude, widget.os.longitude),
+          //       ),
+          //     },
+          //     rotateGesturesEnabled: false,
+          //     zoomControlsEnabled: false,
+          //     zoomGesturesEnabled: false,
+          //     compassEnabled: false,
+          //     scrollGesturesEnabled: false,
+          //   ),
+          // ),
+        ],
       ),
     );
   }

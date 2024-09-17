@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:serv_facil/main.dart';
 import 'package:serv_facil/model/os.dart';
+import 'package:serv_facil/model/user.dart';
+import 'package:serv_facil/provider/user_provider.dart';
 import 'package:serv_facil/screens/details.dart';
+import 'package:serv_facil/services/os_service.dart';
 import 'package:serv_facil/widgets/UI/form_widgets/button.dart';
 import 'package:serv_facil/widgets/UI/info_row.dart';
 
-class OpenOsWidget extends StatelessWidget {
+class OpenOsWidget extends StatefulWidget {
   const OpenOsWidget({
     super.key,
     required this.os,
@@ -13,8 +17,31 @@ class OpenOsWidget extends StatelessWidget {
 
   final Os os;
 
+  @override
+  State<OpenOsWidget> createState() => _OpenOsWidgetState();
+}
+
+class _OpenOsWidgetState extends State<OpenOsWidget> {
   String _formatNumber(int number) {
     return number.toString().padLeft(2, '0');
+  }
+
+  void _attribute() async {
+    final User colaborador =
+        Provider.of<UserProvider>(context, listen: false).user;
+
+    final Map<String, dynamic> data = {
+      'id': widget.os.id,
+      'executor': colaborador.matricula,
+    };
+
+    try {
+      await OsService.updateOs(token: colaborador.token!, data: data);
+
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -40,7 +67,7 @@ class OpenOsWidget extends StatelessWidget {
                 ),
               ),
               child: Text(
-                os.descricao,
+                widget.os.descricao,
                 maxLines: 2,
                 style: TextStyle(
                   fontSize: 22,
@@ -57,20 +84,20 @@ class OpenOsWidget extends StatelessWidget {
                   InfoRow(
                     label: 'Colaborador',
                     info:
-                        '${os.colaborador.nome.split(' ')[0]} ${os.colaborador.nome.split(' ')[1]}',
+                        '${widget.os.colaborador.nome.split(' ')[0]} ${widget.os.colaborador.nome.split(' ')[1]}',
                     color: Theme.of(context).colorScheme.onTertiary,
                   ),
                   InfoRow(
                     label: 'Executor',
-                    info: os.executor == null
+                    info: widget.os.executor == null
                         ? 'Não possui'
-                        : '${os.executor!.nome.split(' ')[0]} ${os.executor!.nome.split(' ')[1]}',
+                        : '${widget.os.executor!.nome.split(' ')[0]} ${widget.os.executor!.nome.split(' ')[1]}',
                     color: Theme.of(context).colorScheme.onTertiary,
                   ),
                   InfoRow(
                     label: 'Início',
                     info:
-                        '${_formatNumber(os.abertura.day)}/${_formatNumber(os.abertura.month)}/${os.abertura.year}',
+                        '${_formatNumber(widget.os.abertura.day)}/${_formatNumber(widget.os.abertura.month)}/${widget.os.abertura.year}',
                     color: Theme.of(context).colorScheme.onTertiary,
                   ),
                   Padding(
@@ -79,7 +106,7 @@ class OpenOsWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Button(
-                          onPressed: () {},
+                          onPressed: _attribute,
                           text: 'Atribuir a mim',
                           color: Theme.of(context).colorScheme.primary,
                           width: double.minPositive,
@@ -88,7 +115,8 @@ class OpenOsWidget extends StatelessWidget {
                         Button(
                           onPressed: () => navigatorKey.currentState?.push(
                             MaterialPageRoute(
-                              builder: (context) => DetailsScreen(os: os),
+                              builder: (context) =>
+                                  DetailsScreen(os: widget.os),
                             ),
                           ),
                           text: 'Detalhes',
