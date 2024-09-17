@@ -48,9 +48,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
