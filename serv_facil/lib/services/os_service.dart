@@ -7,7 +7,7 @@ import 'package:serv_facil/model/user.dart';
 import 'package:serv_facil/services/user_service.dart';
 
 class OsService {
-  static Future<List<Os>> getAllOs({ required String token }) async {
+  static Future<List<Os>> getAllOs({required String token}) async {
     final response = await http.get(
       Uri.parse('$apiUrl/os'),
       headers: {
@@ -127,6 +127,24 @@ class OsService {
       return body.map((e) => Os.fromJson(e)).toList();
     } else {
       throw Exception('Could not fetch closed Oss.');
+    }
+  }
+
+  static Future<void> updateOs({
+    required String token,
+    required Map<String, dynamic> data,
+  }) async {
+    final response = await http.patch(
+      Uri.parse('$apiUrl/os'),
+      body: jsonEncode(data),
+      headers: {
+        'authorization': token,
+        'content-type': 'application/json',
+      },
+    );
+
+    if (response.statusCode != 202) {
+      throw Exception('Could not update Os.');
     }
   }
 }

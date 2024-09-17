@@ -64,7 +64,7 @@ class OpenOsWidget extends StatelessWidget {
                     label: 'Executor',
                     info: os.executor == null
                         ? 'Não possui'
-                        : '${os.colaborador.nome.split(' ')[0]} ${os.colaborador.nome.split(' ')[1]}',
+                        : '${os.executor!.nome.split(' ')[0]} ${os.executor!.nome.split(' ')[1]}',
                     color: Theme.of(context).colorScheme.onTertiary,
                   ),
                   InfoRow(

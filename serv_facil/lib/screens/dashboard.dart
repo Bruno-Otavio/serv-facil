@@ -46,7 +46,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            const Text('Todas as OS'),
+            const Text('Todas as OS', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700,),),
+            const SizedBox(height: 10,),
             Expanded(
               child: FutureBuilder(
                 future: OsService.getAllOs(token: colaborador!.token!),

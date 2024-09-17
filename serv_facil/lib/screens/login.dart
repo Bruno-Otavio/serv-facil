@@ -33,16 +33,22 @@ class _LoginScreenState extends State<LoginScreen> {
       Fluttertoast.showToast(
         msg: 'Login realizado com sucesso!',
         backgroundColor: Theme.of(context).colorScheme.primary,
-        fontSize: 16
+        fontSize: 16,
       );
 
       Provider.of<UserProvider>(context, listen: false).user = colaborador;
       navigatorKey.currentState?.pushReplacementNamed('/home');
+    } on InvalidSetorException {
+      Fluttertoast.showToast(
+        msg: 'Setor Inválido',
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        fontSize: 16,
+      );
     } catch (e) {
       Fluttertoast.showToast(
-        msg: 'Matrícula ou PIN inválidos.',
+        msg: 'Matricula ou PIN inválidos.',
         backgroundColor: Theme.of(context).colorScheme.primary,
-        fontSize: 16
+        fontSize: 16,
       );
     }
   }

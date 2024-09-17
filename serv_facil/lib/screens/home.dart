@@ -59,8 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: data.length,
                 itemBuilder: (context, index) {
                   final Os os = data[index];
+
                   return os.executor?.matricula == colaborador!.matricula
-                      ? TakenOsWidget(os: os)
+                      ? TakenOsWidget(os: os,)
                       : OpenOsWidget(os: os);
                 },
               );

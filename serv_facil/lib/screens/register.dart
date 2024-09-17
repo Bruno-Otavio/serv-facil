@@ -46,6 +46,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await UserService.addColaborador(data: data);
 
     Fluttertoast.showToast(msg: 'Cadastro realizdo com sucesso!');
+
+    navigatorKey.currentState?.pop();
   }
 
   @override
