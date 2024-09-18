@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:serv_facil/main.dart';
 import 'package:serv_facil/model/os.dart';
 import 'package:serv_facil/model/user.dart';
 import 'package:serv_facil/provider/user_provider.dart';
+import 'package:serv_facil/screens/add_comment.dart';
 import 'package:serv_facil/screens/details.dart';
 import 'package:serv_facil/services/os_service.dart';
 import 'package:serv_facil/widgets/UI/form_widgets/button.dart';
@@ -38,7 +40,11 @@ class _OpenOsWidgetState extends State<OpenOsWidget> {
     try {
       await OsService.updateOs(token: colaborador.token!, data: data);
 
-      setState(() {});
+      Fluttertoast.showToast(
+        msg: 'Os ${widget.os.id} atribuída a você',
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        fontSize: 16,
+      );
     } catch (e) {
       print(e);
     }
@@ -106,7 +112,12 @@ class _OpenOsWidgetState extends State<OpenOsWidget> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Button(
-                          onPressed: _attribute,
+                          onPressed: () => navigatorKey.currentState?.push(
+                            MaterialPageRoute(
+                              builder: (context) => AddCommentScreen(
+                                  os: widget.os, action: _attribute),
+                            ),
+                          ),
                           text: 'Atribuir a mim',
                           color: Theme.of(context).colorScheme.primary,
                           width: double.minPositive,

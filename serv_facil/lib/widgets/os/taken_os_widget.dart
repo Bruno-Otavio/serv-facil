@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:serv_facil/main.dart';
 import 'package:serv_facil/model/os.dart';
 import 'package:serv_facil/provider/user_provider.dart';
+import 'package:serv_facil/screens/add_comment.dart';
 import 'package:serv_facil/screens/details.dart';
 import 'package:serv_facil/services/os_service.dart';
 import 'package:serv_facil/widgets/UI/form_widgets/button.dart';
@@ -35,9 +36,8 @@ class _TakenOsWidgetState extends State<TakenOsWidget> {
     try {
       final String token =
           Provider.of<UserProvider>(context, listen: false).user.token!;
-      await OsService.updateOs(token: token, data: data);
 
-      setState(() {});
+      await OsService.updateOs(token: token, data: data);
 
       Fluttertoast.showToast(
         msg: 'Os ${widget.os.id} encerrada.',
@@ -110,7 +110,15 @@ class _TakenOsWidgetState extends State<TakenOsWidget> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Button(
-                          onPressed: () => _closeOs(context),
+                          onPressed: () =>
+                              navigatorKey.currentState?.push(
+                            MaterialPageRoute(
+                              builder: (context) => AddCommentScreen(
+                                os: widget.os,
+                                action: () => _closeOs(context),
+                              ),
+                            ),
+                          ),
                           text: 'Encerrar',
                           color: Theme.of(context).colorScheme.tertiary,
                           width: double.minPositive,

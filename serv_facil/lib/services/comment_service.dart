@@ -44,7 +44,7 @@ class CommentService {
     required Map<String, dynamic> data,
   }) async {
     final response = await http.post(
-      Uri.parse('$apiUrl/comenatiro'),
+      Uri.parse('$apiUrl/comentario'),
       body: jsonEncode(data),
       headers: {
         'authorization': token,
@@ -52,7 +52,7 @@ class CommentService {
       },
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 201) {
       throw Exception('Could not add comment.');
     }
   }
